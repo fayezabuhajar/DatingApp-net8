@@ -2,21 +2,35 @@ using API.Data;
 using Microsoft.AspNetCore.Connections;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+internal class Program
+{
+    private static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+        // Add services to the container.
 
-builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(opt => {
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+        builder.Services.AddControllers();
+        builder.Services.AddDbContext<DataContext>(opt =>
+        {
+            opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+        });
 
 
-app.MapControllers();
+        builder.Services.AddCors();
 
-app.Run();
+        var app = builder.Build();
+
+
+
+        // Configure the HTTP request pipeline.
+
+  
+        app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
+
+
+        app.MapControllers();
+
+        app.Run();
+    }
+}
