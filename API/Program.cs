@@ -1,5 +1,6 @@
 
 using API.Extensions;
+using API.Middleware;
 
 
 internal class Program
@@ -20,7 +21,7 @@ internal class Program
 
         // Configure the HTTP request pipeline.
 
-
+        app.UseMiddleware<ExceptionMiddleware>();
         app.UseCors(x =>
             x.AllowAnyHeader()
                 .AllowAnyMethod()
